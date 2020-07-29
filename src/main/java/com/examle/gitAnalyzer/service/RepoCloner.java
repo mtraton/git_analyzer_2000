@@ -1,5 +1,6 @@
 package com.examle.gitAnalyzer.service;
 
+import com.examle.gitAnalyzer.exception.FailedToCloneRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -24,7 +25,9 @@ public class RepoCloner {
                     .setDirectory(new File(repoPath))
                     .call();
         } catch (GitAPIException e) {
-            log.error("Failed to clone repository {} - {}", url, e.getMessage());
+            String errorMessage = String.format("Failed to clone repository %s - %s", url, e.getMessage());
+            log.error(errorMessage);
+            throw new FailedToCloneRepository(errorMessage);
         }
     }
 }
