@@ -1,35 +1,25 @@
 package com.examle.gitAnalyzer.web;
 
 import com.examle.gitAnalyzer.service.CommitAnalyzer;
-import com.examle.gitAnalyzer.web.dto.CloneRepoDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/commit")
 public class CommitController {
-
-
-/*
-@GetMapping("/employees/{id}")
-  Employee one(@PathVariable Long id) {
-
-    return repository.findById(id)
-      .orElseThrow(() -> new EmployeeNotFoundException(id));
-  }
- */
     @GetMapping("/commit/{repoName}")
-    public ResponseEntity<?> getCommits(@PathVariable String repoName) {
-        CommitAnalyzer commitAnalyzer = new CommitAnalyzer();
+    public ResponseEntity<List<String>> getCommits(@PathVariable String repoName) {
+        List<String> commitData = new ArrayList<>();
         try {
-            commitAnalyzer.traverse(commitAnalyzer.getRepository());
+            commitData = new CommitAnalyzer().getCommitData();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(commitData, HttpStatus.CREATED);
     }
 }
