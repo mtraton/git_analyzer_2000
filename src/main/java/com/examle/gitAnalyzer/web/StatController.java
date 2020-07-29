@@ -26,7 +26,7 @@ public class StatController {
 
     @GetMapping("/{repoName}/count")
     public ResponseEntity<?> getTotalNumberOfCommits(@PathVariable("repoName") String repoName,
-                                                     @RequestParam(defaultValue = "master") String branch)
+                                                     @RequestParam(name = "branch", defaultValue = "master") String branch)
             throws IOException {
         List<Commit> commitData = analyzer.getCommitData(repoName, branch);
         List<UserCommitData> userCommitHistogram = collector.collectTotalNumberOfCommits(commitData);
