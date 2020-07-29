@@ -10,7 +10,8 @@ import java.io.File;
 
 @Service
 @Slf4j
-public class GitRepoCloner {
+public class RepoCloner {
+
     @Value("${repo.path}")
     private String path;
 
