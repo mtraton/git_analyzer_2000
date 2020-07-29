@@ -24,7 +24,7 @@ public class CommitController {
 
     @GetMapping("/{repoName}")
     public ResponseEntity<List<Commit>> getCommits(@PathVariable String repoName,
-                                                   @RequestParam(defaultValue = "master") String branch) {
+                                                   @RequestParam(name = "branch", defaultValue = "master") String branch) {
         List<Commit> commitData = new ArrayList<>();
         try {
             commitData = commitAnalyzer.getCommitData(repoName, branch);
@@ -37,7 +37,7 @@ public class CommitController {
     @GetMapping("/{repoName}/{user}")
     public ResponseEntity<List<Commit>> getCommitsForUser(@PathVariable String repoName,
                                                           @PathVariable String user,
-                                                          @RequestParam(defaultValue = "master") String branch) {
+                                                          @RequestParam(name = "branch", defaultValue = "master") String branch) {
         List<Commit> commitData = new ArrayList<>();
         try {
             commitData = commitAnalyzer.getCommitDataForUser(repoName, branch, user);
