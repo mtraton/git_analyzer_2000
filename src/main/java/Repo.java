@@ -9,7 +9,7 @@ public class Repo {
         try {
             Git.cloneRepository()
                     .setURI(repoURl)
-                    .setDirectory(new File(repoPath))
+                    .setDirectory(new File(repoPath + "/" + repoURl))
                     .call();
         } catch (GitAPIException e) {
             e.printStackTrace();

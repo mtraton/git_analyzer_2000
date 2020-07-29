@@ -15,10 +15,12 @@ public class GitRepoCloner {
     private String path;
 
     public void cloneRepository(String url) {
+        String repoPath = path + url.substring(url.lastIndexOf("/"), url.lastIndexOf("."));
+        log.info("Cloning repo from {} to the {}", url, repoPath);
         try {
             Git.cloneRepository()
                     .setURI(url)
-                    .setDirectory(new File(path))
+                    .setDirectory(new File(repoPath))
                     .call();
         } catch (GitAPIException e) {
             log.error("Failed to clone repository {} - {}", url, e.getMessage());
