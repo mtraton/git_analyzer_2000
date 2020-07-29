@@ -56,7 +56,7 @@ public class CommitAnalyzer {
     private LocalDateTime getTimeStampFromCommit(RevCommit commit) {
         int commitTime = commit.getCommitTime();
         return Instant                         // Represent a moment in UTC, an offset of zero hours-minutes-seconds.
-                .ofEpochMilli(commitTime)
+                .ofEpochSecond(commitTime)
                 .atOffset(                        // Convert from `Instant` (always in UTC, an offset of zero) to `OffsetDateTime` which can have any offset.
                         ZoneOffset.UTC                // A constant representing an offset of zero hours-minutes-seconds, that is, UTC itself.
                 )            // Parse a count of milliseconds since 1970-01-01T00:00Z. Returns a `Instant` object.
