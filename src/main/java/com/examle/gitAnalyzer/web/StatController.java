@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -24,8 +25,10 @@ public class StatController {
     private final CommitAnalyzer analyzer;
 
     @GetMapping("/{repoName}/count")
-    public ResponseEntity<?> getTotalNumberOfCommits(@PathVariable("repoName") String repoName) throws IOException {
-        List<Commit> commitData = analyzer.getCommitData(repoName);
+    public ResponseEntity<?> getTotalNumberOfCommits(@PathVariable("repoName") String repoName,
+                                                     @RequestParam(defaultValue = "master") String branch)
+            throws IOException {
+        List<Commit> commitData = analyzer.getCommitData(repoName, branch);
         List<UserCommitData> userCommitHistogram = collector.collectTotalNumberOfCommits(commitData);
         return new ResponseEntity<>(userCommitHistogram, HttpStatus.OK);
     }
