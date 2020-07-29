@@ -11,7 +11,7 @@ import java.io.File;
 @Service
 @Slf4j
 public class GitRepoCloner {
-    @Value("repo.path")
+    @Value("${repo.path}")
     private String path;
 
     public void cloneRepository(String url) {
