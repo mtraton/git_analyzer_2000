@@ -33,4 +33,10 @@ public class RepoController {
         return new ResponseEntity<>(repositories, HttpStatus.OK);
     }
 
+    @GetMapping
+    public ResponseEntity<?> pull(@RequestBody CloneRepoDto request) {
+        cloner.cloneRepository(request.getRepoUrl());
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
 }

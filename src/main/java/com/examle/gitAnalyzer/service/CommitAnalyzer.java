@@ -24,7 +24,7 @@ public class CommitAnalyzer {
     @Value("${repo.path}")
     private String path;
 
-    private Repository getRepository(String repoName) throws IOException {
+    Repository getRepository(String repoName) throws IOException {
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         return builder
                 .findGitDir(new File(String.format("%s/%s", path, repoName)))
