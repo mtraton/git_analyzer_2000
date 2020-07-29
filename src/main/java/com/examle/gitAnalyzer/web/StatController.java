@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -26,10 +28,14 @@ public class StatController {
 
     @GetMapping("/{repoName}/count")
     public ResponseEntity<?> getTotalNumberOfCommits(@PathVariable("repoName") String repoName,
-                                                     @RequestParam(name = "branch", defaultValue = "master") String branch)
+                                                     @RequestParam(name = "branch", defaultValue = "master") String branch,
+                                                     @RequestParam(name = "from", defaultValue = "1970-01-01") String fromTime,
+                                                     @RequestParam(name = "to", defaultValue = "2999-12-31") String toTime)
             throws IOException {
         List<Commit> commitData = analyzer.getCommitData(repoName, branch);
-        List<UserCommitData> userCommitHistogram = collector.collectTotalNumberOfCommits(commitData);
+        LocalDate startTime = LocalDate.parse(fromTime, DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalDate endTime = LocalDate.parse(toTime, DateTimeFormatter.ISO_LOCAL_DATE);
+        List<UserCommitData> userCommitHistogram = collector.collectTotalNumberOfCommits(commitData, startTime, endTime);
         return new ResponseEntity<>(userCommitHistogram, HttpStatus.OK);
     }
 
