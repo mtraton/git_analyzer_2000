@@ -1,8 +1,10 @@
 package com.examle.gitAnalyzer.service;
 
+import com.examle.gitAnalyzer.exception.RefsDoesNotExistsException;
 import com.examle.gitAnalyzer.model.Commit;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
@@ -31,8 +33,8 @@ public class CommitAnalyzer {
                 .build();
     }
 
-    public List<Commit> getCommitData(String repoName) throws IOException {
-        String treeName = "refs/heads/master"; // tag or branch
+    public List<Commit> getCommitData(String repoName, String ref) throws IOException {
+        String treeName = "refs/heads/" + ref; // tag or branch
         Repository repository = getRepository(repoName);
         Git git = new Git(repository);
         List<Commit> commitData = new ArrayList<>();
@@ -41,14 +43,17 @@ public class CommitAnalyzer {
                 String address = commit.getAuthorIdent().getEmailAddress();
                 commitData.add(new Commit(address, getTimeStampFromCommit(commit), commit.getShortMessage()));
             }
-        } catch (IOException | GitAPIException e) {
+        } catch (NullPointerException e) {
+            throw new RefsDoesNotExistsException("Refs does not exists: " + ref);
+        }
+        catch (IOException | GitAPIException e) {
             e.printStackTrace();
         }
         return commitData;
     }
 
-    public List<Commit> getCommitDataForUser(String repoName, String user) throws IOException {
-        return getCommitData(repoName).stream()
+    public List<Commit> getCommitDataForUser(String repoName, String branch, String user) throws IOException {
+        return getCommitData(repoName, branch).stream()
                 .filter(commit -> commit.getAuthor().equals(user))
                 .collect(Collectors.toList());
     }
