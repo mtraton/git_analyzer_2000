@@ -12,11 +12,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/commit")
 public class CommitController {
-    @GetMapping("/commit/{repoName}")
+    @GetMapping("/{repoName}")
     public ResponseEntity<List<String>> getCommits(@PathVariable String repoName) {
         List<String> commitData = new ArrayList<>();
         try {
-            commitData = new CommitAnalyzer().getCommitData();
+            commitData = new CommitAnalyzer().getCommitData(repoName);
         } catch (IOException e) {
             e.printStackTrace();
         }

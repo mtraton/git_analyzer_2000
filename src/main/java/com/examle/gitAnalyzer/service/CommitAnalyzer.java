@@ -21,16 +21,16 @@ public class CommitAnalyzer {
     @Value("${repo.path}")
     private String path;
 
-    private Repository getRepository() throws IOException {
+    private Repository getRepository(String repoName) throws IOException {
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         return builder
-                .setGitDir(new File(path))
+                .setGitDir(new File(String.format("%s/%s", path, repoName)))
                 .build();
     }
 
-    public List<String> getCommitData() throws IOException {
+    public List<String> getCommitData(String repoName) throws IOException {
         String treeName = "refs/heads/master"; // tag or branch
-        Repository repository = getRepository();
+        Repository repository = getRepository(repoName);
         Git git = new Git(repository);
         List<String> commitData = new ArrayList<>();
         try {
